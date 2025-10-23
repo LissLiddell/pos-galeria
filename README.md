@@ -19,10 +19,3 @@ Sistema de Punto de Venta especializado para galerías de arte y exposiciones. D
 - npm o yarn
 - Cuenta en [Supabase](https://supabase.com)
 
-### Instalación Automática
-```bash
-# Ejecutar el script de instalación
-./install.sh
-
-# En Windows (Git Bash)
-./install.sh
