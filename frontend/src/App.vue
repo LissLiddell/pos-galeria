@@ -1,79 +1,93 @@
 <template>
-  <div class="app">
-    <header>
-      <h1>🎨 Galería de Arte</h1>
-      <p>Bienvenido a nuestra galería virtual</p>
-    </header>
+  <div class="h-screen flex flex-col bg-gray-50">
+    <Header />
     
-    <main>
-      <div class="status">
-        <p>✅ Frontend funcionando en: http://localhost:3000</p>
-        <p>✅ Backend funcionando en: http://localhost:5000</p>
-      </div>
-      
-      <div class="actions">
-        <button @click="fetchObras">Cargar Obras</button>
-        <div v-if="obras.length" class="obras-list">
-          <h3>Obras de Arte:</h3>
-          <div v-for="obra in obras" :key="obra.id" class="obra-item">
-            <strong>{{ obra.titulo }}</strong> - {{ obra.artista }} - ${{ obra.precio }}
+    <main class="flex flex-1 p-4 main-container overflow-hidden">
+      <!-- Products Section -->
+      <div class="w-1/2 pr-4 flex flex-col h-full md:w-7/12">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Productos</h2>
+          <div class="relative">
+            <input 
+              v-model="searchQuery"
+              type="text" 
+              placeholder="Buscar productos..." 
+              class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
           </div>
         </div>
+        
+        <ProductList :products="filteredProducts" />
+      </div>
+      
+      <!-- Cart Section -->
+      <div class="w-1/2 pl-4 flex flex-col h-full md:w-5/12">
+        <Cart />
       </div>
     </main>
+    
+    <PaymentModal />
+    <SuccessModal />
+    
+    <!-- Toast Notification -->
+    <div 
+      v-show="showToast" 
+      class="toast fixed top-5 right-5 bg-success text-white p-4 rounded-lg shadow-lg z-50 transition-transform duration-300"
+      :class="{ 'translate-x-0': showToast, 'translate-x-full': !showToast }"
+    >
+      <div class="flex items-center">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span>¡Producto agregado al carrito!</span>
+      </div>
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'App',
-  data() {
-    return {
-      obras: []
-    }
-  },
-  methods: {
-    async fetchObras() {
-      try {
-        const response = await fetch('http://localhost:5000/api/obras')
-        this.obras = await response.json()
-      } catch (error) {
-        console.error('Error cargando obras:', error)
-      }
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useCartStore } from './stores/cart'
+import Header from './components/Header.vue'
+import ProductList from './components/ProductList.vue'
+import Cart from './components/Cart.vue'
+import PaymentModal from './components/PaymentModal.vue'
+import SuccessModal from './components/SuccessModal.vue'
+
+const cartStore = useCartStore()
+const searchQuery = ref('')
+const showToast = ref(false)
+
+const filteredProducts = computed(() => {
+  if (!searchQuery.value) return cartStore.products
+  
+  return cartStore.products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    product.description.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+})
+
+// Watch for cart additions to show toast
+watch(
+  () => cartStore.items.length,
+  (newCount, oldCount) => {
+    if (newCount > oldCount) {
+      showToast.value = true
+      setTimeout(() => {
+        showToast.value = false
+      }, 3000)
     }
   }
-}
+)
 </script>
 
-<style>
-.app {
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+<style scoped>
+.main-container {
+  height: calc(100vh - 80px);
 }
-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-.status {
-  background: #f5f5f5;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-}
-.actions button {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.obra-item {
-  background: white;
-  padding: 10px;
-  margin: 5px 0;
-  border-left: 4px solid #007bff;
+
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
 }
 </style>

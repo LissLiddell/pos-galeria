@@ -1,0 +1,57 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* Tus estilos personalizados aquí */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.btn-primary {
+  @apply bg-primary hover:bg-opacity-90 text-white transition-all duration-200;
+}
+
+.btn-secondary {
+  @apply bg-secondary hover:bg-opacity-90 text-white transition-all duration-200;
+}
+
+.btn-success {
+  @apply bg-success hover:bg-opacity-90 text-white transition-all duration-200;
+}
+
+.btn-danger {
+  @apply bg-danger hover:bg-opacity-90 text-white transition-all duration-200;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+}
+
+.payment-option {
+  @apply border-2 border-gray-300 rounded-lg cursor-pointer transition-all duration-200;
+}
+
+.payment-option:hover, .payment-option.selected {
+  @apply border-primary bg-blue-50;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c5c9d5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a3a8b7;
+}
