@@ -1,3 +1,13 @@
+<template>
+  <button 
+  @click="comprar"
+  class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg mt-4"
+>
+  Comprar
+</button>
+</template>
+
+<script setup>
 import { ProcesarVentaContado } from "@/core/Application/use-cases/ProcesarVentaContado";
 import { FakeVentaRepository } from "@/core/infrastructure/repositories/FakeVentaRepository";
 import { FakeInventarioRepository } from "@/core/infrastructure/repositories/FakeInventarioRepository";
@@ -28,3 +38,9 @@ async function comprar() {
     alert("Error: " + err.message);
   }
 }
+
+</script>
+
+<style scoped>
+
+</style>
