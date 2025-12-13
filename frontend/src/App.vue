@@ -18,7 +18,7 @@
           </div>
         </div>
         
-        <ProductList :products="filteredProducts" />
+        <ProductList :products="filteredProducts" @add="cartStore.addItem"/>
       </div>
       
       <!-- Cart Section -->
@@ -52,10 +52,15 @@ import ProductList from './components/ProductList.vue'
 import Cart from './components/Cart.vue'
 import PaymentModal from './components/PaymentModal.vue'
 import SuccessModal from './components/SuccessModal.vue'
+import { onMounted } from 'vue'
 
 const cartStore = useCartStore()
 const searchQuery = ref('')
 const showToast = ref(false)
+
+onMounted(() => {
+  cartStore.cargarProductos()
+})
 
 const filteredProducts = computed(() => {
   if (!searchQuery.value) return cartStore.products

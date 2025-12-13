@@ -4,22 +4,22 @@
       <i class="fas fa-shopping-cart mr-2 text-primary"></i>
       Carrito de Compra
       <span v-if="cartItemsCount > 0" class="ml-2 bg-primary text-white text-sm px-2 py-1 rounded-full">
-        {{ cartItemsCount }}
+        {{ cartStore.cartItemsCount }}
       </span>
     </h2>
     
     <div class="cart-list flex-1 overflow-y-auto">
       <CartItem 
-        v-for="item in items"
+        v-for="item in cartStore.items"
         :key="item.id"
         :item="item"
-        @update-quantity="updateQuantity"
-        @remove-item="removeFromCart"
+        @update-quantity="cartStore.updateQuantity"
+        @remove-item="cartStore.removeFromCart"
       />
       
       <!-- Empty cart message -->
       <div 
-        v-if="items.length === 0"
+        v-if="cartStore.items.length === 0"
         class="flex flex-col items-center justify-center text-center p-6"
       >
         <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-3"></i>
@@ -29,23 +29,23 @@
     </div>
     
     <!-- Cart Summary -->
-    <div v-if="items.length > 0" class="mt-4 pt-4 border-t">
+    <div v-if="cartStore.items.length > 0" class="mt-4 pt-4 border-t">
       <div class="flex justify-between mb-2">
         <span class="text-gray-600">Subtotal:</span>
-        <span class="font-medium">${{ subtotal.toFixed(2) }}</span>
+        <span class="font-medium">${{ cartStore.subtotal.toFixed(2) }}</span>
       </div>
       <div class="flex justify-between mb-4">
         <span class="text-gray-600">IVA (16%):</span>
-        <span class="font-medium">${{ tax.toFixed(2) }}</span>
+        <span class="font-medium">${{ cartStore.tax.toFixed(2) }}</span>
       </div>
       <div class="flex justify-between text-lg font-bold mb-6">
         <span>Total:</span>
-        <span>${{ total.toFixed(2) }}</span>
+        <span>${{ cartStore.total.toFixed(2) }}</span>
       </div>
       
       <div class="flex space-x-4">
         <button 
-          @click="clearCart"
+          @click="cartStore.clearCart"
           class="flex-1 btn-danger py-2 rounded-md flex justify-center items-center"
         >
           <i class="fas fa-times mr-2"></i>
@@ -68,16 +68,6 @@ import { useCartStore } from '../stores/cart'
 import CartItem from './CartItem.vue'
 
 const cartStore = useCartStore()
-const { 
-  items, 
-  subtotal, 
-  tax, 
-  total, 
-  cartItemsCount,
-  clearCart,
-  removeFromCart,
-  updateQuantity 
-} = cartStore
 
 const openPaymentModal = () => {
   cartStore.isPaymentModalOpen = true
