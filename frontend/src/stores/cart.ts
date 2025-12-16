@@ -38,9 +38,15 @@ export const useCartStore = defineStore('cart', () => {
     items.value = []
   }
 
+  const subtotal = computed(() =>
+    items.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  )
+
+  const tax = computed(() => subtotal.value * 0.16)
+
   // 👉 Total calculado
   const total = computed(() =>
-    items.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    subtotal.value + tax.value
   )
 
   function cargarProductos() {
@@ -64,12 +70,16 @@ export const useCartStore = defineStore('cart', () => {
 
   return {
     items,
+    products,
+
     addItem,
     decrementItem,
     removeItem,
     clearCart,
-    total,
     cargarProductos,
-    products
+
+    subtotal,
+    tax,
+    total    
   }
 })

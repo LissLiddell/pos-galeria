@@ -22,9 +22,11 @@
       </div>
       
       <!-- Cart Section -->
-      <div class="w-1/2 pl-4 flex flex-col h-full md:w-5/12">
-        <Cart />
-      </div>
+       <Transition name="slide-fade">
+          <div class="w-1/2 pl-4 flex flex-col h-full md:w-5/12" v-if="cartStore.items.length > 0">
+            <Cart />
+          </div>
+       </Transition>      
     </main>
     
     <PaymentModal />
@@ -33,6 +35,7 @@
     <!-- Toast Notification -->
     <div 
       v-show="showToast" 
+      style="margin-top: 60px;"
       class="toast fixed top-5 right-5 bg-success text-white p-4 rounded-lg shadow-lg z-50 transition-transform duration-300"
       :class="{ 'translate-x-0': showToast, 'translate-x-full': !showToast }"
     >
@@ -94,5 +97,33 @@ watch(
   .main-container {
     flex-direction: column;
   }
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.slide-fade-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-fade-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
 }
 </style>
